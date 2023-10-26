@@ -1,0 +1,47 @@
+{
+	"image": "registry.cafebazaar.ir:5000/cloud/openstack/engine/devenv:v0.5.1",
+	"postCreateCommand": "apt update; apt install vim mc zsh python3-pip wget -y; sh -c '$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)';",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"streetsidesoftware.code-spell-checker",
+				"alphabotsec.vscode-eclipse-keybindings",
+				"golang.go",
+				"ssigwart.trailing-whitespace-fixer",
+				"streetsidesoftware.code-spell-checker",
+				"shd101wyy.markdown-preview-enhanced",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	},
+	"mounts": [
+		{
+			"source": "/lib/modules",
+			"target": "/lib/modules",
+			"type": "bind"
+		},
+		{
+			"source": "/dev",
+			"target": "/dev",
+			"type": "bind"
+		}
+	],
+	// workspaceMount to persist the changes in the container in a volume
+	"workspaceMount": "source=remote-workspace,target=/opt/workspace,type=volume",
+	"workspaceFolder": "/opt/workspace",
+	"runArgs": [
+		"--privileged"
+	],
+	"appPort": [
+		"6443:443"
+	],
+	"containerEnv": {
+		"http_proxy": "http://proxy.sotoon.ir:3128",
+		"https_proxy": "http://proxy.sotoon.ir:3128",
+		"no_proxy": "172.21.0.0/16,172.19.0.0/16,10.0.0.0/8,192.168.0.0/16",
+		"BANDAR_PROXY": "http://public-bandar-v2.compute.sotoon.ir:3128"
+	},
+	"postStartCommand": [
+		""
+	]
+}

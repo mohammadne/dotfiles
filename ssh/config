@@ -1,0 +1,20 @@
+IdentitiesOnly yes
+
+Include ap/config
+
+Host melodyo
+  HostName api.melodyo.org
+  IdentityFile ~/.ssh/melodyo_ed25519
+  User centos
+
+Host github.com
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/github_ed25519
+  User git
+
+# ethernetservers
+
+Host proxy-server
+  HostName 84.46.236.35
+  IdentityFile ~/.ssh/ethernetservers_ed25519
+  User root

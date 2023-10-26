@@ -1,0 +1,10 @@
+Host gitlab.tasn.ir
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/ap/gitlab_ed25519
+  User git
+
+Host pc.tasn.ir
+  HostName 192.168.15.65
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/ap/pc_ed25519
+  User m.nasresfahani

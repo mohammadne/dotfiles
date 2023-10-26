@@ -1,0 +1,14 @@
+[init]
+	defaultBranch = main
+[user]
+	email = mohammadne.dev@gmail.com
+	name = mohammadne
+	signingkey = EA86378778D71842
+[pull]
+	rebase = true
+[url "ssh://git@github.com/"]
+	insteadof = https://github.com/
+[commit]
+	gpgsign = true
+[credential]
+	helper = /usr/libexec/git-core/git-credential-libsecret

@@ -1,0 +1,100 @@
+# -------------------------------------------------------------- Tmux
+
+# tmux new session (create a new one)
+function tns() {
+  session_name=$1
+  
+  # get basename of the current directory
+  if [ -z "$session_name" ]; then session_name=${PWD##*/}; fi
+  
+  # create a new new-session based on current working directory
+  if ! tmux has-session -t "$session_name" 2> /dev/null; then
+    TMUX='' tmux new-session -s "$session_name" -d
+  fi
+  
+  # attach if outside of tmux, switch if you're in tmux.
+  if [ -z "$TMUX" ]; then
+    tmux attach -t "$session_name"
+  else
+    tmux switch-client -t "$session_name"
+  fi
+}
+
+# tmux select session (delete current one)
+function tss() {
+  # use built in choose-tree if being inside a session
+  if [ ! -z "$TMUX" ]; then (tmux choose-tree -Zs &); return; fi
+  
+  # get session names (ignore error if no session exist)
+  sessions=$(tmux ls -F '#S' 2> /dev/null)
+  
+  # return if no session exist
+  if [ -z "$sessions" ]; then echo "there is no session available"; return; fi
+  
+  # select a session between sessions
+  select session_name in $sessions; do break; done
+  
+  # return in case of invalid selection
+  if [ -z "$session_name" ]; then echo "invalid session selected"; exit 1; fi
+  
+  # switch into new session
+  tns "$session_name"
+}
+
+# tmux kill session (delete current one)
+function tks() {
+  session_name=$1
+  
+  # set session_name if not given
+  if [ -z "$session_name" ]; then
+    # return if not in a session
+    if [ -z "$TMUX" ]; then return 0; fi
+    
+    # get current session name
+    session_name=$(tmux display-message -p '#S')
+  fi
+  
+  # kill session_name if available
+  tmux kill-session -t "$session_name" 2> /dev/null
+}
+
+# --------------------------------------------------------------------------------------- Proxy
+
+function ap-proxy() {
+  if [ "$#" -ne 1 ]; then
+    echo "Usage: ap-proxy [status|on|off|toggle]"
+    return 1
+  fi
+  
+  proxy_info=$(gopass show ap/proxy)
+  
+  local server=$( echo $proxy_info | grep 'server: ' | awk -F ': ' '{print $2}' )
+  local cert=$( echo $proxy_info | grep 'certificate: ' | awk -F ': ' '{print $2}' )
+  local password=$( echo $proxy_info | grep 'password: ' | awk -F ': ' '{print $2}' )
+  local user=$( echo $proxy_info | grep 'username: ' | awk -F ': ' '{print $2}' )
+  
+  case "$1" in
+    status)
+      # xray_status=$(docker ps | grep "xray" | grep -iv "paused")
+      # if [ -z "$xray_status" ]; then echo "off"; else echo "on"; fi
+      if pgrep openconnect > /dev/null; then echo "on"; else echo "off"; fi
+    ;;
+    on)
+      if [[ $(ap-proxy status) == "on" ]]; then return; fi
+      echo $password | sudo openconnect --passwd-on-stdin $server -u $user -b --servercert $cert
+    ;;
+    off)
+      if [[ $(ap-proxy status) == "off" ]]; then return; fi
+      sudo pkill openconnect
+    ;;
+    toggle)
+      if [[ $(ap-proxy status) == "on" ]]; then ap-proxy off; else ap-proxy on; fi
+    ;;
+    *)
+      echo "Usage: ap-proxy [status|on|off|toggle]"
+      return 1
+    ;;
+  esac
+}
+
+# --------------------------------------------------------------------------------------- Redsocks
