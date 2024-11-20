@@ -1,7 +1,7 @@
-live_config_reload = true
+general.live_config_reload = true
 
 # color reference: https://github.com/alacritty/alacritty-theme
-import = [
+general.import = [
   "~/.config/alacritty/themes/one_dark.toml"
 ]
 
@@ -57,7 +57,7 @@ mods = "Control"
 [mouse]
 hide_when_typing = true
 
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 
 [window]
