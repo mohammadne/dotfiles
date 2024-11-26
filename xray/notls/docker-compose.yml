@@ -1,0 +1,6 @@
+services:
+  xray-xtls-notls:
+    build: .
+    ports:
+      - "{{local_port}}:{{local_port}}"
+    restart: always
