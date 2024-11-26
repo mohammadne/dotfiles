@@ -10,7 +10,5 @@ RUN wget https://github.com/XTLS/Xray-core/releases/download/v24.11.21/Xray-linu
 
 WORKDIR $XRAY_DIRECTORY
 
-COPY config.json config.json
-
-ENTRYPOINT ["./xray"]
-CMD ["run", "-c", "./config.json"]
+COPY notls-config.json notls-config.json
+COPY reality-config.json reality-config.json
