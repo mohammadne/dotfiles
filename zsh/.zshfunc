@@ -67,11 +67,16 @@ function ap-proxy() {
   fi
   
   proxy_info=$(gopass show ap/proxy)
+  wifi_info=$(nmcli -f GENERAL.STATE con show WifiAsansaz 2>/dev/null | awk '{print $2}')
   
   local server=$( echo $proxy_info | grep 'server: ' | awk -F ': ' '{print $2}' )
   local cert=$( echo $proxy_info | grep 'certificate: ' | awk -F ': ' '{print $2}' )
   local password=$( echo $proxy_info | grep 'password: ' | awk -F ': ' '{print $2}' )
   local user=$( echo $proxy_info | grep 'username: ' | awk -F ': ' '{print $2}' )
+
+  if [[ "$wifi_info" == "activated" ]]; then
+    server="192.168.10.103:443"
+  fi
   
   case "$1" in
     status)
