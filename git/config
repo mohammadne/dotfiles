@@ -8,6 +8,8 @@
 	rebase = true
 [url "ssh://git@github.com/"]
 	insteadof = https://github.com/
+[url "ssh://git@gitlab.tasn.ir/"]
+	insteadof = https://gitlab.tasn.ir/
 [commit]
 	gpgsign = true
 [credential]
