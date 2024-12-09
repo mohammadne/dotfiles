@@ -7,10 +7,6 @@
 [pull]
 	rebase = true
 [url "ssh://git@github.com/"]
-	insteadof = https://github.com/
-[url "ssh://git@gitlab.tasn.ir/"]
-	insteadof = https://gitlab.tasn.ir/
+    insteadOf = https://github.com/
 [commit]
 	gpgsign = true
-[credential]
-	helper = /usr/libexec/git-core/git-credential-libsecret
