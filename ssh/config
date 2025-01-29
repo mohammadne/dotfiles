@@ -12,6 +12,13 @@ Host github.com
   IdentityFile ~/.ssh/github_ed25519
   User git
 
+# parspack
+
+Host zirac-server
+  HostName 195.248.243.80
+  IdentityFile ~/.ssh/parspack_ed25519
+  User root
+
 # ethernetservers
 
 Host proxy-server
