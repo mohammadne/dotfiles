@@ -1,0 +1,5 @@
+Host gitlab.hamrah.in
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/zarinpal/gitlab_ed25519
+  User git
+

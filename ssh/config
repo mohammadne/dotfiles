@@ -1,6 +1,7 @@
 IdentitiesOnly yes
 
 Include ap/config
+Include zarinpal/config
 
 Host melodyo
   HostName api.melodyo.org
@@ -22,6 +23,6 @@ Host zirac-server
 # ethernetservers
 
 Host proxy-server
-  HostName 84.46.236.35
+  HostName 194.62.250.140
   IdentityFile ~/.ssh/ethernetservers_ed25519
   User root

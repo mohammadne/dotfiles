@@ -102,4 +102,42 @@ function ap-proxy() {
   esac
 }
 
+function zarinpal-proxy() {
+  if [ "$#" -ne 1 ]; then
+    echo "Usage: zarinpal-proxy [status|on|off|toggle]"
+    return 1
+  fi
+  
+  proxy_info=$(gopass show zarinpal/proxy)
+  
+  local server=$(echo "$proxy_info" | grep -m1 '^server:' | cut -d':' -f2- | xargs)
+  local cert=$(echo "$proxy_info" | grep -m1 '^certificate:' | cut -d':' -f2- | xargs)
+  local user=$(echo "$proxy_info" | grep -m1 '^username:' | cut -d':' -f2- | xargs)
+  local password=$(echo "$proxy_info" | grep -m1 '^password:' | cut -d':' -f2- | xargs)
+  
+  case "$1" in
+    status)
+      # xray_status=$(docker ps | grep "xray" | grep -iv "paused")
+      # if [ -z "$xray_status" ]; then echo "off"; else echo "on"; fi
+      if pgrep openfortivpn > /dev/null; then echo "on"; else echo "off"; fi
+    ;;
+    on)
+      if [[ $(ap-proxy status) == "on" ]]; then return; fi
+      echo sudo openfortivpn "$server" --username "$user" --trusted-cert "$cert" --password "'$password'"
+      sudo openfortivpn "$server" --username "$user" --trusted-cert "$cert" --password "'$password'"
+    ;;
+    off)
+      if [[ $(ap-proxy status) == "off" ]]; then return; fi
+      sudo pkill openfortivpn
+    ;;
+    toggle)
+      if [[ $(ap-proxy status) == "on" ]]; then ap-proxy off; else ap-proxy on; fi
+    ;;
+    *)
+      echo "Usage: zarinpal-proxy [status|on|off|toggle]"
+      return 1
+    ;;
+  esac
+}
+
 # --------------------------------------------------------------------------------------- Redsocks
